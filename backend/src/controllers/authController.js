@@ -1,5 +1,6 @@
 const authModel = require("../models/authModel");
 const jwt = require("jsonwebtoken");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const login = async (req, resp) => {
   try {
@@ -10,9 +11,9 @@ const login = async (req, resp) => {
         expiresIn: "24h",
       },
     };
-    
+
     let userData = await authModel.login(body.email, body.password);
-    let msg = '';
+    let msg = "";
     if (!userData || userData.length === 0) {
       return resp.status(401).json({
         success: false,
@@ -29,7 +30,7 @@ const login = async (req, resp) => {
         success: true,
         message: "Login successful",
         loginData: userData,
-        token
+        token,
       });
     }
   } catch (error) {
@@ -37,6 +38,30 @@ const login = async (req, resp) => {
   }
 };
 
+const signup = async (req, resp) => {
+  try {
+    const body = req.body;
+    const user = await authModel.signup(
+      body.email,
+      body.password,
+      body.mobile,
+      body.usertype
+    );
+    return resp.status(201).json({
+      success: true,
+      message: "Signup successful",
+      user,
+    });
+  } catch (error) {
+    return resp.status(500).json({
+      success: false,
+      message: "Signup failed",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   login,
+  signup,
 };

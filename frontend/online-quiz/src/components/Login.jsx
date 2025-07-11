@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./css/login.css"; // Import the CSS file for styling
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -41,8 +41,8 @@ const Login = () => {
         if (data.success && data.token) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.loginData));
-          window.location.href = "/dashboard";
-          //navigate("/dashboard");
+          //window.location.href = "/dashboard";
+          navigate("/dashboard");
         } else {
           setError("Login failed.");
         }
@@ -90,6 +90,10 @@ const Login = () => {
             Login
           </button>
         </form>
+        <div className="mt-3 text-center">
+          <span>Don't have an account? </span>
+          <Link to="/signup">Sign up</Link>
+        </div>
       </div>
     </div>
   );
